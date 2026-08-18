@@ -32,5 +32,17 @@ Thumbs.db
 ngrok.exe
 ngrok
 
-# Logs
+# Logs & Cache
 *.log
+.pytest_cache/
+*.tiff
+*.bmp
+
+# Ignore Documentation & Presentation Files
+*.docx
+*.pdf
+*.pptx
+*.txt
+*.md
+ex images/
+images_saree_300dpi_cmyk.tiff
