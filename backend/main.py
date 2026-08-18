@@ -4,7 +4,17 @@ FastAPI Application Entry Point.
 """
 
 import os
+import sys
 from pathlib import Path
+
+# --- FIX FOR RENDER DEPLOYMENTS ---
+# If uvicorn is run from inside the backend directory, it loses the package context.
+# This forces Python to recognize "backend" as the parent package so relative imports work.
+if __package__ is None or __package__ == "":
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    __package__ = "backend"
+# -----------------------------------
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse
