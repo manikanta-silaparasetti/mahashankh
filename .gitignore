@@ -43,6 +43,8 @@ ngrok
 *.pdf
 *.pptx
 *.txt
+!backend/requirements.txt
+!requirements.txt
 *.md
 ex images/
 images_saree_300dpi_cmyk.tiff
