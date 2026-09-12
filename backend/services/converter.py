@@ -29,6 +29,7 @@ from .png_jpeg_exporter import PNGJPEGExporter
 from .quality_checker import QualityChecker
 from .upscaler.pillow import PillowUpscaler
 from .upscaler.realesrgan import RealESRGANUpscaler
+from .bleed_manager import BleedManager
 
 
 class ImageConverter:
@@ -45,6 +46,7 @@ class ImageConverter:
         self.quality_checker = QualityChecker()
         self.pillow_upscaler = PillowUpscaler()
         self.realesrgan_upscaler = RealESRGANUpscaler()
+        self.bleed_manager = BleedManager()
 
     def process(
         self,
@@ -113,6 +115,32 @@ class ImageConverter:
             custom_icc_profile_path=options.custom_icc_profile_path,
             matte_color=options.matte_color
         )
+
+        # 4.5. Optional Bleed & Printer Crop Marks Extension
+        bleed_applied_info = None
+        crop_marks_applied = False
+        if options.add_bleed:
+            trim_w, trim_h = img.size
+            bleed_px = self.bleed_manager.mm_to_pixels(options.bleed_margin_mm, options.dpi)
+            bleed_img = self.bleed_manager.extend_bleed(
+                img,
+                bleed_px=bleed_px,
+                fill_mode=options.bleed_fill_mode,
+                matte_color=options.matte_color
+            )
+            if options.add_crop_marks:
+                img, bleed_report = self.bleed_manager.add_printer_marks(
+                    bleed_img,
+                    trim_w=trim_w,
+                    trim_h=trim_h,
+                    bleed_px=bleed_px,
+                    dpi=options.dpi,
+                    job_slug=f"MahaShankh Studio • Trim {trim_w}x{trim_h}px • Bleed {options.bleed_margin_mm}mm • {options.dpi} DPI"
+                )
+                crop_marks_applied = True
+            else:
+                img = bleed_img
+            bleed_applied_info = f"+{options.bleed_margin_mm}mm ({bleed_px}px) {options.bleed_fill_mode}"
 
         # 5. Export to Target Raster Format
         target_fmt = options.output_format
@@ -201,6 +229,8 @@ class ImageConverter:
             compression=compression_str,
             alpha_flattened=color_report.get("alpha_flattened", False),
             processing_time_ms=round(elapsed_ms, 2),
+            bleed_applied=bleed_applied_info,
+            crop_marks_applied=crop_marks_applied,
             peak_memory_mb=round(peak_mem / (1024 * 1024), 2)
         )
 

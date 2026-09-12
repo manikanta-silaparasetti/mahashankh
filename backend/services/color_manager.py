@@ -8,6 +8,7 @@ NO generative AI is used for color space conversions.
 import io
 import os
 from typing import Tuple, Optional, Dict, Any
+import numpy as np
 from PIL import Image, ImageCms
 from ..models.schemas import ColorModeOption
 
@@ -89,12 +90,31 @@ class ColorManager:
                 except Exception as e:
                     report["icc_warning"] = f"ICC transform failed ({str(e)}), falling back to standard Pillow CMYK"
 
-            # 3. Standard deterministic Pillow RGB -> CMYK formula fallback
-            rgb_image = image.convert("RGB")
-            cmyk_image = rgb_image.convert("CMYK")
+            # 3. High-Fidelity GCR (Gray Component Replacement) RGB -> CMYK
+            rgb_arr = np.array(image.convert("RGB"), dtype=np.float32) / 255.0
+            r, g, b = rgb_arr[:, :, 0], rgb_arr[:, :, 1], rgb_arr[:, :, 2]
+            
+            # Compute Key/Black (K)
+            k = 1.0 - np.maximum(np.maximum(r, g), b)
+            one_minus_k = 1.0 - k
+            one_minus_k[one_minus_k == 0] = 1e-7
+
+            # Compute Cyan, Magenta, Yellow with Under-Color Removal
+            c = (1.0 - r - k) / one_minus_k
+            m = (1.0 - g - k) / one_minus_k
+            y = (1.0 - b - k) / one_minus_k
+
+            c_byte = np.clip(c * 255.0, 0, 255).astype(np.uint8)
+            m_byte = np.clip(m * 255.0, 0, 255).astype(np.uint8)
+            y_byte = np.clip(y * 255.0, 0, 255).astype(np.uint8)
+            k_byte = np.clip(k * 255.0, 0, 255).astype(np.uint8)
+
+            cmyk_arr = np.stack([c_byte, m_byte, y_byte, k_byte], axis=2)
+            cmyk_image = Image.fromarray(cmyk_arr, mode="CMYK")
+
             report["final_mode"] = "CMYK"
-            report["conversion_method"] = "standard_pillow_cmyk"
-            report["note"] = "Standard algorithmic RGB->CMYK transform applied. For precise press matching, supply a destination ICC profile."
+            report["conversion_method"] = "gcr_cmyk_transform"
+            report["note"] = "High-fidelity GCR (Gray Component Replacement) applied for deep blacks and color press separation."
             return cmyk_image, report
 
         # Target: RGB

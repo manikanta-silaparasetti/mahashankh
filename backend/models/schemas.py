@@ -181,6 +181,24 @@ class ConversionOptions(BaseModel):
         default=None,
         description="Optional file path to custom destination CMYK or RGB ICC profile"
     )
+    add_bleed: bool = Field(
+        default=False,
+        description="Extend image with mirrored/clamped bleed margin for blade guillotine cutting"
+    )
+    bleed_margin_mm: float = Field(
+        default=3.0,
+        ge=0.0,
+        le=50.0,
+        description="Bleed margin width in millimeters (standard: 3.0mm / 0.125 in)"
+    )
+    bleed_fill_mode: str = Field(
+        default="mirror",
+        description="Bleed fill algorithm: 'mirror' (edge reflection), 'clamp', or 'matte'"
+    )
+    add_crop_marks: bool = Field(
+        default=False,
+        description="Draw corner hairline crop marks, center registration targets, and calibration swatches"
+    )
 
 
 class ConversionRequest(BaseModel):
@@ -218,6 +236,8 @@ class ProcessingMetadata(BaseModel):
     compression: str
     alpha_flattened: bool
     processing_time_ms: float
+    bleed_applied: Optional[str] = None
+    crop_marks_applied: bool = False
     peak_memory_mb: float
 
 
@@ -279,3 +299,55 @@ class BatchConversionResponse(BaseModel):
     succeeded: int
     failed: int
     results: List[Dict[str, Any]]
+
+
+# ─────────────────────────────────────────────
+#  Phase 3 & 4: Separation, Pattern & Vector Models
+# ─────────────────────────────────────────────
+
+class SeparationChannelStats(BaseModel):
+    filename: str
+    ink_coverage_percent: float
+    resolution: List[int]
+
+
+class SeparationResponse(BaseModel):
+    job_title: str
+    dpi: int
+    plates_generated: List[str]
+    channel_stats: Dict[str, SeparationChannelStats]
+    zip_size_bytes: int
+    suitable_for_screen_printing: bool
+    zip_base64: Optional[str] = None
+
+
+class PatternRepeatMode(str, Enum):
+    STRAIGHT = "straight"
+    HALF_DROP = "half_drop"
+    MIRROR = "mirror"
+
+
+class PatternRepeatResponse(BaseModel):
+    mode: str
+    repeat_x: int
+    repeat_y: int
+    tile_dimensions: List[int]
+    total_dimensions: List[int]
+    total_tiles: int
+    seamless_blending_applied: bool
+    image_base64: Optional[str] = None
+
+
+class VectorizeFormat(str, Enum):
+    SVG = "svg"
+    DXF = "dxf"
+
+
+class VectorizeResponse(BaseModel):
+    format: str
+    contours_traced: int
+    total_vertices: int
+    dimensions: List[int]
+    file_size_bytes: int
+    content: str
+    filename: str

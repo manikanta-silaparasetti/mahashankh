@@ -8,6 +8,7 @@ import json
 import base64
 from typing import Optional
 from fastapi import APIRouter, File, UploadFile, Form, HTTPException, Body, BackgroundTasks, Response, Request
+from fastapi.responses import FileResponse
 from PIL import Image
 import io
 
@@ -63,6 +64,10 @@ async def convert_image(
     target_physical_width: Optional[float] = Form(None),
     target_physical_height: Optional[float] = Form(None),
     physical_unit: DimensionUnit = Form(DimensionUnit.INCHES),
+    add_bleed: bool = Form(False),
+    bleed_margin_mm: float = Form(3.0),
+    bleed_fill_mode: str = Form("mirror"),
+    add_crop_marks: bool = Form(False),
     return_json: bool = Form(False),
     remove_background: bool = Form(False)
 ):
@@ -109,7 +114,11 @@ async def convert_image(
                     upscale_algorithm=upscale_algorithm,
                     target_physical_width=target_physical_width,
                     target_physical_height=target_physical_height,
-                    physical_unit=physical_unit
+                    physical_unit=physical_unit,
+                    add_bleed=add_bleed,
+                    bleed_margin_mm=bleed_margin_mm,
+                    bleed_fill_mode=bleed_fill_mode,
+                    add_crop_marks=add_crop_marks
                 )
                 wants_json = return_json
             else:

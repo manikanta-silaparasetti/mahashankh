@@ -132,3 +132,28 @@ def test_upscale_2x_conversion(converter, loader):
     assert report.processing.upscale == "2x"
 
     os.remove(out_path)
+
+
+def test_realesrgan_upscale_4x_conversion(converter, loader):
+    raw_png = create_sample_png_bytes(width=50, height=40)
+    loaded = loader.load_from_bytes(raw_png)
+
+    options = ConversionOptions(
+        output_format=SupportedOutputFormat.PNG,
+        dpi=300,
+        upscale_factor=4,
+        upscale_algorithm=UpscaleAlgorithm.REAL_ESRGAN
+    )
+
+    out_path, report = converter.process(loaded, options)
+    loaded.close()
+
+    assert report.output.width == 200
+    assert report.output.height == 160
+    assert report.processing.upscale == "4x"
+    assert "Real-ESRGAN" in report.processing.upscaler
+
+    with Image.open(out_path) as verify_img:
+        assert verify_img.size == (200, 160)
+
+    os.remove(out_path)

@@ -1,0 +1,34 @@
+backend/
+├── main.py                    # FastAPI entrypoint, middleware & static mount
+├── requirements.txt           # Production dependencies
+├── api/
+│   ├── __init__.py            # API v1 router aggregator
+│   ├── convert.py             # POST /api/v1/convert (file stream + JSON reports)
+│   ├── inspect.py             # POST /api/v1/inspect (metadata & print matrices)
+│   ├── estimate.py            # POST /api/v1/estimate (memory & storage estimation)
+│   └── batch.py               # POST /api/v1/batch-convert (multi-file processing)
+├── services/
+│   ├── __init__.py
+│   ├── image_validator.py     # File signatures, limits & decompression protection
+│   ├── image_loader.py        # Stream/byte loading & EXIF orientation normalization
+│   ├── dpi_manager.py         # DPI & physical sizing calculations
+│   ├── color_manager.py       # CMYK conversion, ICC profiles & alpha flattening
+│   ├── size_estimator.py      # Uncompressed memory & disk size bounds
+│   ├── tiff_exporter.py       # Production TIFF exporter (LZW/Deflate/Packbits)
+│   ├── bmp_exporter.py        # BMP manufacturing exporter
+│   ├── png_jpeg_exporter.py   # PNG & Progressive JPEG exporter
+│   ├── quality_checker.py     # Independent output verification
+│   ├── converter.py           # Master conversion pipeline coordinator
+│   └── upscaler/
+│       ├── base.py            # UpscalerInterface abstraction
+│       ├── pillow.py          # Deterministic Lanczos/Bicubic upscaler
+│       └── realesrgan.py      # Modular Real-ESRGAN adapter
+├── models/
+│   ├── __init__.py
+│   └── schemas.py             # Pydantic v2 schemas and validation models
+└── tests/
+    ├── __init__.py
+    ├── test_dpi.py            # DPI & dimension calculation tests
+    ├── test_validators.py     # Magic byte and security limit tests
+    ├── test_converter.py      # TIFF/BMP/CMYK conversion tests
+    └── test_api.py            # FastAPI HTTP endpoint tests
