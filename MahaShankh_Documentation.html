@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MahaShankh Studio Pro — System Documentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+  /* ── GLOBAL ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --brand:  #7C3AED;
+    --cyan:   #06B6D4;
+    --emerald:#10B981;
+    --amber:  #F59E0B;
+    --rose:   #F43F5E;
+    --indigo: #6366F1;
+    --ink:    #0F172A;
+    --ink2:   #1E293B;
+    --muted:  #475569;
+    --border: #E2E8F0;
+    --bg:     #F8FAFC;
+  }
+  html { font-size: 13px; }
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ── COVER PAGE ── */
+  .cover {
+    height: 100vh;
+    min-height: 700px;
+    background: linear-gradient(145deg, #0F0C1D 0%, #130D2E 40%, #0A1628 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 40px;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(124,58,237,0.25) 0%, transparent 70%);
+    top: -100px; left: -100px;
+    border-radius: 50%;
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(6,182,212,0.18) 0%, transparent 70%);
+    bottom: -80px; right: -80px;
+    border-radius: 50%;
+  }
+  .cover-inner { position: relative; z-index: 2; max-width: 680px; }
+  .cover-logo {
+    width: 72px; height: 72px;
+    background: linear-gradient(135deg, rgba(124,58,237,0.3), rgba(6,182,212,0.25));
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+    box-shadow: 0 0 40px rgba(124,58,237,0.4);
+  }
+  .cover-logo svg { width: 36px; height: 36px; }
+  .cover-eyebrow {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #A78BFA;
+    margin-bottom: 12px;
+  }
+  .cover-title {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    background: linear-gradient(135deg, #fff 0%, #C4B5FD 50%, #67E8F9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .cover-sub {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.55);
+    font-weight: 400;
+    margin-bottom: 40px;
+    line-height: 1.6;
+  }
+  .cover-pills {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 48px;
+  }
+  .cover-pill {
+    padding: 5px 14px;
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    border: 1px solid;
+  }
+  .cp-violet { background: rgba(124,58,237,0.15); border-color: rgba(124,58,237,0.5); color: #C4B5FD; }
+  .cp-cyan   { background: rgba(6,182,212,0.12);  border-color: rgba(6,182,212,0.4);  color: #67E8F9; }
+  .cp-emerald{ background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.4); color: #6EE7B7; }
+  .cp-amber  { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.4); color: #FDE68A; }
+  .cover-meta {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.05em;
+  }
+  .cover-meta strong { color: rgba(255,255,255,0.55); }
+
+  /* ── TOC PAGE ── */
+  .toc-page {
+    padding: 60px 72px;
+    page-break-after: always;
+    background: white;
+  }
+  .section-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--brand);
+    margin-bottom: 8px;
+  }
+  .page-title {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .page-subtitle {
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin-bottom: 40px;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 20px;
+  }
+  .toc-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .toc-num {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .toc-body { flex: 1; }
+  .toc-heading { font-size: 0.95rem; font-weight: 700; color: var(--ink); }
+  .toc-desc { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+  .toc-subs {
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .toc-sub-chip {
+    font-size: 0.67rem;
+    padding: 2px 8px;
+    border-radius: 100px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  /* ── CONTENT PAGE ── */
+  .content-page {
+    padding: 50px 72px;
+    background: white;
+    page-break-after: always;
+  }
+  .content-page:last-child { page-break-after: avoid; }
+
+  /* ── FEATURE HEADER ── */
+  .feature-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--border);
+  }
+  .feature-icon {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.6rem;
+  }
+  .fi-violet { background: linear-gradient(135deg, #EDE9FE, #DDD6FE); }
+  .fi-cyan   { background: linear-gradient(135deg, #CFFAFE, #A5F3FC); }
+  .fi-emerald{ background: linear-gradient(135deg, #D1FAE5, #A7F3D0); }
+  .fi-indigo { background: linear-gradient(135deg, #E0E7FF, #C7D2FE); }
+  .feature-meta {}
+  .feature-num {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .fn-violet { color: var(--brand); }
+  .fn-cyan   { color: var(--cyan); }
+  .fn-emerald{ color: var(--emerald); }
+  .fn-indigo { color: var(--indigo); }
+  .feature-title {
+    font-size: 1.55rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .feature-tagline {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.5;
+    max-width: 560px;
+  }
+
+  /* ── SUB FEATURE CARD ── */
+  .sub-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .sub-card {
+    padding: 16px 18px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .sub-card-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .sub-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .sub-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .sub-desc {
+    font-size: 0.76rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .sub-tech {
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--brand);
+    background: #F5F3FF;
+    border: 1px solid #DDD6FE;
+    border-radius: 4px;
+    padding: 2px 7px;
+    display: inline-block;
+  }
+
+  /* ── TECH TABLE ── */
+  .tech-section {
+    margin-top: 24px;
+    padding: 18px 20px;
+    background: var(--ink2);
+    border-radius: 10px;
+    color: rgba(255,255,255,0.85);
+  }
+  .tech-section-title {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #94A3B8;
+    margin-bottom: 12px;
+  }
+  .tech-rows { display: flex; flex-direction: column; gap: 7px; }
+  .tech-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 0.78rem;
+  }
+  .tech-key {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: #67E8F9;
+    width: 160px;
+    flex-shrink: 0;
+  }
+  .tech-val { color: rgba(255,255,255,0.7); }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow-box {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    margin: 24px 0;
+  }
+  .flow-step {
+    flex: 1;
+    text-align: center;
+    padding: 12px 8px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--ink);
+    position: relative;
+  }
+  .flow-step .fs-icon { font-size: 1.2rem; display: block; margin-bottom: 4px; }
+  .flow-arrow {
+    width: 28px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  /* ── FULL WIDTH TECH PAGE ── */
+  .full-tech-page {
+    padding: 50px 72px;
+    background: white;
+    page-break-after: always;
+  }
+
+  /* ── FULL STACK TABLE ── */
+  table.stack {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 24px;
+    font-size: 0.8rem;
+  }
+  table.stack th {
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--ink);
+    color: rgba(255,255,255,0.8);
+    font-size: 0.67rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  table.stack th:first-child { border-radius: 8px 0 0 0; }
+  table.stack th:last-child  { border-radius: 0 8px 0 0; }
+  table.stack td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--ink);
+  }
+  table.stack tr:nth-child(even) td { background: var(--bg); }
+  table.stack td:first-child { font-weight: 700; white-space: nowrap; }
+  table.stack td code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    background: #EDE9FE;
+    color: var(--brand);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  /* ── API TABLE ── */
+  table.api {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-size: 0.77rem;
+  }
+  table.api th {
+    text-align: left;
+    padding: 8px 12px;
+    background: #1E293B;
+    color: rgba(255,255,255,0.75);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  table.api td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  table.api tr:nth-child(even) td { background: var(--bg); }
+  .method {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+  .m-post { background: #D1FAE5; color: #065F46; }
+  .m-get  { background: #DBEAFE; color: #1E40AF; }
+  .endpoint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.73rem;
+    color: var(--brand);
+  }
+
+  /* ── CALLOUT BOX ── */
+  .callout {
+    padding: 14px 18px;
+    border-radius: 8px;
+    border-left: 4px solid;
+    margin: 18px 0;
+    font-size: 0.8rem;
+  }
+  .callout-violet { border-color: var(--brand); background: #F5F3FF; color: #4C1D95; }
+  .callout-emerald{ border-color: var(--emerald); background: #ECFDF5; color: #064E3B; }
+  .callout-cyan   { border-color: var(--cyan); background: #ECFEFF; color: #0C4A6E; }
+  .callout-amber  { border-color: var(--amber); background: #FFFBEB; color: #78350F; }
+  .callout strong { font-weight: 700; }
+
+  /* ── ARCHITECTURE DIAGRAM ── */
+  .arch-boxes {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .arch-box {
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .arch-box-title {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .arch-item {
+    font-size: 0.73rem;
+    color: var(--muted);
+    padding: 3px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .arch-item::before {
+    content: '›';
+    font-weight: 700;
+  }
+
+  /* ── PRINT OVERRIDES ── */
+  @media print {
+    body { font-size: 12px; }
+    .cover { height: 100vh; page-break-after: always; }
+    .toc-page, .content-page, .full-tech-page { page-break-after: always; }
+    @page { margin: 0; size: A4; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════
+     COVER PAGE
+══════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-inner">
+    <div class="cover-logo">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="url(#cg)" stroke-width="2">
+        <defs>
+          <linearGradient id="cg" x1="0" y1="0" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#A855F7"/>
+            <stop offset="100%" stop-color="#06B6D4"/>
+          </linearGradient>
+        </defs>
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+      </svg>
+    </div>
+    <div class="cover-eyebrow">Technical System Documentation</div>
+    <div class="cover-title">MahaShankh<br>Studio Pro</div>
+    <div class="cover-sub">
+      AI-Powered Print Production, Prepress &amp; Textile Engineering Platform<br>
+      Built for the Indian textile and commercial printing industry
+    </div>
+    <div class="cover-pills">
+      <span class="cover-pill cp-violet">🖨 Format &amp; Bleed</span>
+      <span class="cover-pill cp-cyan">⬛ CMYK Plates</span>
+      <span class="cover-pill cp-emerald">🥻 Saree Pattern</span>
+      <span class="cover-pill cp-amber">⟵ Vectorize</span>
+    </div>
+    <div class="cover-meta">
+      <strong>Version:</strong> 2.0 &nbsp;·&nbsp;
+      <strong>Stack:</strong> Python 3.13 · FastAPI · Real-ESRGAN · Pillow &nbsp;·&nbsp;
+      <strong>Repo:</strong> github.com/manikanta-silaparasetti/mahasankh
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     TABLE OF CONTENTS
+══════════════════════════════════════════════════ -->
+<div class="toc-page">
+  <div class="section-label">Contents</div>
+  <div class="page-title">What We Built</div>
+  <div class="page-subtitle">4 independent production tools built on a single AI backend — upload once, use any or all.</div>
+
+  <div class="toc-item">
+    <div class="toc-num" style="background:#EDE9FE; color:#7C3AED;">01</div>
+    <div class="toc-body">
+      <div class="toc-heading">Format &amp; Bleed Converter</div>
+      <div class="toc-desc">Universal image conversion for commercial print — DPI, colour space, bleed margins, crop marks, AI super-resolution.</div>
+      <div class="toc-subs">
+        <span class="toc-sub-chip">DPI Conversion</span>
+        <span class="toc-sub-chip">TIFF / PNG / BMP / JPEG</span>
+        <span class="toc-sub-chip">RGB → CMYK (GCR)</span>
+        <span class="toc-sub-chip">Industrial Bleed</span>
+        <span class="toc-sub-chip">Crop &amp; Registration Marks</span>
+        <span class="toc-sub-chip">Real-ESRGAN AI (4×)</span>
+        <span class="toc-sub-chip">Background Removal</span>
+        <span class="toc-sub-chip">Rename Before Save</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="toc-item">
+    <div class="toc-num" style="background:#CFFAFE; color:#0891B2;">02</div>
+    <div class="toc-body">
+      <div class="toc-heading">CMYK Color Separation &amp; Plate Generator</div>
+      <div class="toc-desc">Splits artwork into 4 individual ink channel plates with registration crosshairs — ready for screen printing silk burning.</div>
+      <div class="toc-subs">
+        <span class="toc-sub-chip">4-Channel Plate Split</span>
+        <span class="toc-sub-chip">Film-Positive Rendering</span>
+        <span class="toc-sub-chip">Registration Crosshairs</span>
+        <span class="toc-sub-chip">Job Title Slug</span>
+        <span class="toc-sub-chip">ZIP Bundle Export</span>
+        <span class="toc-sub-chip">Ink Coverage Report</span>
+        <span class="toc-sub-chip">300 / 600 DPI Plates</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="toc-item">
+    <div class="toc-num" style="background:#D1FAE5; color:#047857;">03</div>
+    <div class="toc-body">
+      <div class="toc-heading">Saree &amp; Textile Pattern Repeat Engine</div>
+      <div class="toc-desc">Tiles any motif into a seamless fabric repeat — half-drop brick, straight grid, mirror reflection.</div>
+      <div class="toc-subs">
+        <span class="toc-sub-chip">Half-Drop Repeat</span>
+        <span class="toc-sub-chip">Straight Grid Repeat</span>
+        <span class="toc-sub-chip">Mirror Reflection</span>
+        <span class="toc-sub-chip">Edge-Matched Seamless</span>
+        <span class="toc-sub-chip">Configurable Grid Size</span>
+        <span class="toc-sub-chip">PNG Export</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="toc-item">
+    <div class="toc-num" style="background:#E0E7FF; color:#4338CA;">04</div>
+    <div class="toc-body">
+      <div class="toc-heading">Auto-Vectorization (SVG / DXF)</div>
+      <div class="toc-desc">Converts raster pixel artwork into clean vector paths — for CNC laser cutting, embroidery machines and CorelDRAW.</div>
+      <div class="toc-subs">
+        <span class="toc-sub-chip">Contour Tracing</span>
+        <span class="toc-sub-chip">Path Simplification</span>
+        <span class="toc-sub-chip">SVG Export</span>
+        <span class="toc-sub-chip">DXF Export (CNC/Embroidery)</span>
+        <span class="toc-sub-chip">Threshold Control</span>
+        <span class="toc-sub-chip">ZIP (SVG + DXF)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="toc-item" style="border-bottom:none;">
+    <div class="toc-num" style="background:#FEF3C7; color:#92400E;">05</div>
+    <div class="toc-body">
+      <div class="toc-heading">Technology Stack &amp; System Architecture</div>
+      <div class="toc-desc">Complete tech breakdown — backend, AI engine, frontend design system, API routes, deployment.</div>
+      <div class="toc-subs">
+        <span class="toc-sub-chip">Python / FastAPI</span>
+        <span class="toc-sub-chip">Real-ESRGAN ONNX</span>
+        <span class="toc-sub-chip">Pillow / OpenCV / NumPy</span>
+        <span class="toc-sub-chip">Vanilla JS / CSS</span>
+        <span class="toc-sub-chip">REST API</span>
+        <span class="toc-sub-chip">Render / Vercel Deploy</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     FEATURE 01 — FORMAT & BLEED
+══════════════════════════════════════════════════ -->
+<div class="content-page">
+  <div class="feature-header">
+    <div class="feature-icon fi-violet">🖨</div>
+    <div class="feature-meta">
+      <div class="feature-num fn-violet">Feature 01 — Format &amp; Bleed Converter</div>
+      <div class="feature-title">Universal Print Conversion Engine</div>
+      <div class="feature-tagline">Converts any image to print-ready format — adjusting DPI, colour space, adding industrial bleed margins and corner crop marks. Includes AI-powered super-resolution using Real-ESRGAN.</div>
+    </div>
+  </div>
+
+  <div class="flow-box">
+    <div class="flow-step"><span class="fs-icon">📤</span>Upload Image</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span class="fs-icon">🎨</span>Color Convert</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span class="fs-icon">🔍</span>AI Upscale</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span class="fs-icon">📐</span>Add Bleed</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span class="fs-icon">✂</span>Crop Marks</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span class="fs-icon">📥</span>Download</div>
+  </div>
+
+  <div class="sub-grid">
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#7C3AED;"></div>
+        <div class="sub-name">DPI / Resolution Conversion</div>
+      </div>
+      <div class="sub-desc">Resamples the image to 72, 150, 300, or 600 DPI. Embeds DPI metadata in the output file so RIP software and print machines read it correctly. 300 DPI is the commercial print standard.</div>
+      <span class="sub-tech">PIL · DPI metadata · LZW TIFF</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#06B6D4;"></div>
+        <div class="sub-name">Output Format Conversion</div>
+      </div>
+      <div class="sub-desc">Exports to TIFF (lossless print standard), PNG (transparent alpha), BMP (raw uncompressed for RIP/vinyl), or JPEG (compressed digital). Format cards replace confusing dropdowns.</div>
+      <span class="sub-tech">PIL · TIFF-LZW · PNG-Deflate</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#F59E0B;"></div>
+        <div class="sub-name">RGB → CMYK Color Conversion</div>
+      </div>
+      <div class="sub-desc">Converts screen RGB images to 4-channel CMYK using High-Fidelity GCR (Grey Component Replacement) — replaces neutral grey mixtures with pure K (black) ink, saving ink and improving shadow depth.</div>
+      <span class="sub-tech">NumPy · Custom GCR · PIL CMYK</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#EF4444;"></div>
+        <div class="sub-name">Industrial Bleed Margin</div>
+      </div>
+      <div class="sub-desc">Extends the artwork past the trim cut line by mirroring edge pixels outward. Default 3mm (industry standard). Supports mirror, clamp (stretch), and white matte fill modes. Live canvas overlay shows trim/safe zone.</div>
+      <span class="sub-tech">NumPy · PIL · cv2.copyMakeBorder</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#10B981;"></div>
+        <div class="sub-name">Corner Crop &amp; Registration Marks</div>
+      </div>
+      <div class="sub-desc">Draws L-shaped hairline crop marks at all 4 corners and circular crosshair registration targets at edge midpoints. Used by press operators to align cutting blades and 4-color press plates.</div>
+      <span class="sub-tech">PIL ImageDraw · Hairline rendering</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#8B5CF6;"></div>
+        <div class="sub-name">AI Super-Resolution (Real-ESRGAN)</div>
+      </div>
+      <div class="sub-desc">Multiplies pixel dimensions 2×, 4×, or 8× using Real-ESRGAN deep learning inference. Runs entirely on CPU via ONNX Runtime — no GPU needed. Processes in 512×512 tiles with overlap to prevent seams. Restores realistic textures.</div>
+      <span class="sub-tech">Real-ESRGAN · ONNX Runtime · 67MB model</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#EC4899;"></div>
+        <div class="sub-name">AI Background Removal</div>
+      </div>
+      <div class="sub-desc">Detects and removes image background using AI segmentation, isolating the main subject with a transparent alpha channel. Output as PNG or TIFF with alpha for product photos, motif isolation and compositing.</div>
+      <span class="sub-tech">rembg / OpenCV · Alpha channel</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#0EA5E9;"></div>
+        <div class="sub-name">Rename Before Save</div>
+      </div>
+      <div class="sub-desc">After conversion, an editable filename input appears above the download button. User types a custom name — the extension badge auto-syncs with the selected format (.tif / .png / .bmp / .jpg). Illegal characters are sanitised automatically.</div>
+      <span class="sub-tech">Vanilla JS · Blob URL · File API</span>
+    </div>
+
+  </div>
+
+  <div class="callout callout-violet">
+    <strong>Live Bleed Preview:</strong> Before converting, a canvas overlay draws a red dashed trim line and green safe zone directly on top of the uploaded image — so the user sees exactly where the blade will cut before processing.
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     FEATURE 02 — CMYK PLATES
+══════════════════════════════════════════════════ -->
+<div class="content-page">
+  <div class="feature-header">
+    <div class="feature-icon fi-cyan">⬛</div>
+    <div class="feature-meta">
+      <div class="feature-num fn-cyan">Feature 02 — CMYK Color Separation &amp; Plate Generator</div>
+      <div class="feature-title">Film-Positive Screen Printing Plates</div>
+      <div class="feature-tagline">Splits full-colour artwork into 4 individual ink channel separation plates — Cyan, Magenta, Yellow, and Black — each as a high-density TIFF with corner registration crosshairs and job title slug, packaged in a downloadable ZIP archive.</div>
+    </div>
+  </div>
+
+  <div class="flow-box">
+    <div class="flow-step"><span class="fs-icon">🎨</span>RGB Image</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span class="fs-icon">🔄</span>CMYK Convert</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span class="fs-icon">✂</span>Split Channels</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span class="fs-icon">🎬</span>Film Positive</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span class="fs-icon">🎯</span>Add Marks</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span class="fs-icon">📦</span>ZIP Export</div>
+  </div>
+
+  <div class="sub-grid">
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#00BFFF;"></div>
+        <div class="sub-name">Cyan Channel Plate</div>
+      </div>
+      <div class="sub-desc">Extracts the C channel from the CMYK image. Controls blue/teal ink density in the final print. Film-positive: areas of high cyan ink appear as dense black on a white film positive for screen exposure.</div>
+      <span class="sub-tech">PIL .split() · NumPy invert</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#FF00A0;"></div>
+        <div class="sub-name">Magenta Channel Plate</div>
+      </div>
+      <div class="sub-desc">Extracts the M channel. Controls red/pink/purple ink density. Critical for skin tones, flowers, and warm artwork in saree and garment printing. Separate plate means the operator can adjust magenta ink independently on press.</div>
+      <span class="sub-tech">PIL · NumPy · Grayscale L mode</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#FFD700;"></div>
+        <div class="sub-name">Yellow Channel Plate</div>
+      </div>
+      <div class="sub-desc">Extracts the Y channel. Controls warm tone, gold, and bright colour density. In textile printing, yellow is the hardest to balance — a separate plate allows precise density control during print registration.</div>
+      <span class="sub-tech">PIL · NumPy · Grayscale</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#6B7280;"></div>
+        <div class="sub-name">Black (K) Channel Plate</div>
+      </div>
+      <div class="sub-desc">Extracts the K (Key/Black) channel, which carries shadow depth, text sharpness, and dark detail. In GCR mode, neutral grey tones are converted to pure K — reducing ink usage and preventing muddiness in shadow areas.</div>
+      <span class="sub-tech">PIL · GCR algorithm · NumPy</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#10B981;"></div>
+        <div class="sub-name">Registration Crosshairs</div>
+      </div>
+      <div class="sub-desc">Draws precision circular crosshair targets (bullseye) at all 4 corners of every plate, outside the artwork boundary. Printers overlay all 4 plates on a light table to check alignment — crosshairs must line up perfectly for colour registration.</div>
+      <span class="sub-tech">PIL ImageDraw · Circle + Hairline</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#7C3AED;"></div>
+        <div class="sub-name">Job Title Slug</div>
+      </div>
+      <div class="sub-desc">Stamps the job name, channel name, and DPI in the white border area of each plate. Example: "MahaShankh Plate • CYAN CHANNEL • Kanchipuram-SS2024 • 300 DPI". Operators can identify plates on the floor without confusion.</div>
+      <span class="sub-tech">PIL ImageDraw.text()</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#F59E0B;"></div>
+        <div class="sub-name">ZIP Bundle Export</div>
+      </div>
+      <div class="sub-desc">All 4 plate TIFFs plus the original RGB preview are packaged into a single in-memory ZIP archive — named after the job title and DPI. Single download delivers everything the print studio needs for one job.</div>
+      <span class="sub-tech">Python zipfile · in-memory BytesIO</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#06B6D4;"></div>
+        <div class="sub-name">Ink Coverage Report</div>
+      </div>
+      <div class="sub-desc">After plate generation, the backend returns per-channel ink coverage percentages (e.g. "Cyan: 42.3%"). Displayed as colour-coded bar graphs in the UI. Helps operators estimate ink consumption and cost before printing.</div>
+      <span class="sub-tech">NumPy mean() · JSON response</span>
+    </div>
+
+  </div>
+
+  <div class="callout callout-cyan">
+    <strong>Plate DPI:</strong> Select 300 DPI for standard textile screen printing, or 600 DPI for fine-detail screens, premium packaging, and photographic halftone reproduction.
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     FEATURE 03 — SAREE PATTERN
+══════════════════════════════════════════════════ -->
+<div class="content-page">
+  <div class="feature-header">
+    <div class="feature-icon fi-emerald">🥻</div>
+    <div class="feature-meta">
+      <div class="feature-num fn-emerald">Feature 03 — Saree &amp; Textile Pattern Repeat Engine</div>
+      <div class="feature-title">Seamless Edge-Matched Fabric Tiling</div>
+      <div class="feature-tagline">Takes any motif or block and generates a seamless, edge-matched tile repeat across a configurable grid — ready for saree, textile, and fabric printing production. Supports three professional repeat modes used across the Indian weaving industry.</div>
+    </div>
+  </div>
+
+  <div class="sub-grid">
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#10B981;"></div>
+        <div class="sub-name">Half-Drop Repeat (50% Brick)</div>
+      </div>
+      <div class="sub-desc">The most common saree and textile repeat mode. Alternating columns are offset by 50% vertically — preventing the eye from tracking horizontal repetition lines. Creates a natural, flowing rhythm across the fabric width. Used by 80%+ of Kanchipuram and Banarasi weaving units.</div>
+      <span class="sub-tech">NumPy tile · vertical offset</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#6366F1;"></div>
+        <div class="sub-name">Straight Grid Repeat</div>
+      </div>
+      <div class="sub-desc">Tiles the motif in a perfect aligned grid — rows and columns lock up precisely. Best for geometric patterns, chevrons, checks, and abstract prints where symmetry and alignment are intentional design choices.</div>
+      <span class="sub-tech">NumPy tile · PIL paste</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#F59E0B;"></div>
+        <div class="sub-name">Mirror Reflection Repeat</div>
+      </div>
+      <div class="sub-desc">Alternates between the original and its horizontally/vertically flipped versions. Creates bilateral symmetry across tile boundaries — ideal for border prints, paisleys, and mandala motifs where the design needs mirror symmetry at tile edges.</div>
+      <span class="sub-tech">PIL transpose · FLIP_LEFT_RIGHT</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#EC4899;"></div>
+        <div class="sub-name">Edge-Matched Seamless Tiling</div>
+      </div>
+      <div class="sub-desc">The output image tiles without any visible seam or cut line — edges are mathematically matched so that when the pattern is printed across the full fabric width, repeats are invisible to the eye. Essential for quality textile production.</div>
+      <span class="sub-tech">PIL paste · offset stitching</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#0EA5E9;"></div>
+        <div class="sub-name">Configurable Grid Size</div>
+      </div>
+      <div class="sub-desc">Sliders for columns (2–6) and rows (2–6) control how many tiles appear in the output grid. A 3×3 grid generates a 9-tile composite preview of how the motif will look across the fabric surface — helping designers verify scale and density before printing.</div>
+      <span class="sub-tech">NumPy hstack + vstack</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#8B5CF6;"></div>
+        <div class="sub-name">High-Res PNG Export</div>
+      </div>
+      <div class="sub-desc">Outputs the full tiled pattern as a high-resolution PNG preserving the original motif quality. The exported file can be directly fed into a textile CAD system, printed on sample yardage, or used as a reference for the weaving programme.</div>
+      <span class="sub-tech">PIL PNG · FastAPI streaming</span>
+    </div>
+
+  </div>
+
+  <div class="callout callout-emerald">
+    <strong>Industry Use:</strong> Half-Drop is the standard for Kanchipuram silk saree pallus. Straight Grid is used for Ikat and block print designs. Mirror Reflection is popular for border work and symmetrical buta motifs.
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     FEATURE 04 — VECTORIZE
+══════════════════════════════════════════════════ -->
+<div class="content-page">
+  <div class="feature-header">
+    <div class="feature-icon fi-indigo">⟵</div>
+    <div class="feature-meta">
+      <div class="feature-num fn-indigo">Feature 04 — Auto-Vectorization (SVG / DXF)</div>
+      <div class="feature-title">Raster to Vector Path Tracing</div>
+      <div class="feature-tagline">Converts pixel-based raster images into clean, scalable vector path files — SVG for web and CorelDRAW workflows, DXF for CNC laser cutting and industrial embroidery machines. No manual tracing required.</div>
+    </div>
+  </div>
+
+  <div class="flow-box">
+    <div class="flow-step"><span class="fs-icon">🖼</span>Raster Image</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span class="fs-icon">⬜</span>Threshold</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span class="fs-icon">🔍</span>Contour Detect</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span class="fs-icon">✂</span>Simplify Paths</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span class="fs-icon">📄</span>SVG / DXF</div>
+  </div>
+
+  <div class="sub-grid">
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#6366F1;"></div>
+        <div class="sub-name">Brightness Threshold Binarisation</div>
+      </div>
+      <div class="sub-desc">Converts the image to greyscale, then applies a configurable threshold (0–255). Pixels darker than the threshold become solid ink paths; lighter pixels become transparent background. Adjustable via slider — 127 default for clean black/white line art.</div>
+      <span class="sub-tech">cv2.threshold · THRESH_BINARY_INV</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#4F46E5;"></div>
+        <div class="sub-name">OpenCV Contour Detection</div>
+      </div>
+      <div class="sub-desc">Runs OpenCV's findContours algorithm on the binary mask to detect all closed outline paths in the image — from the outermost silhouette down to internal detail holes. Hierarchical retrieval preserves the nesting of internal contours (e.g. letters with counters).</div>
+      <span class="sub-tech">cv2.findContours · RETR_TREE</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#7C3AED;"></div>
+        <div class="sub-name">Path Simplification (Douglas-Peucker)</div>
+      </div>
+      <div class="sub-desc">Reduces the number of points on each contour using the Douglas-Peucker algorithm. The epsilon slider (0.5–8.0) controls how aggressively corners are simplified — low epsilon keeps fine detail, high epsilon produces smooth simplified curves for CNC cutting.</div>
+      <span class="sub-tech">cv2.approxPolyDP · Douglas-Peucker</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#0EA5E9;"></div>
+        <div class="sub-name">SVG Export</div>
+      </div>
+      <div class="sub-desc">Generates a standards-compliant SVG file with all detected contours as &lt;path&gt; elements. SVG scales to any size without quality loss — opens directly in CorelDRAW, Inkscape, Adobe Illustrator, and all web browsers.</div>
+      <span class="sub-tech">SVG path d= · Python string template</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#059669;"></div>
+        <div class="sub-name">DXF Export (CNC / Embroidery)</div>
+      </div>
+      <div class="sub-desc">Generates a DXF (Drawing Exchange Format) file with all paths as LWPOLYLINE entities — the universal format for CNC laser cutters, vinyl plotters, Tajima/Barudan industrial embroidery machines, and CAM software.</div>
+      <span class="sub-tech">ezdxf · LWPOLYLINE entities</span>
+    </div>
+
+    <div class="sub-card">
+      <div class="sub-card-head">
+        <div class="sub-dot" style="background:#F59E0B;"></div>
+        <div class="sub-name">Both SVG + DXF ZIP Bundle</div>
+      </div>
+      <div class="sub-desc">Optionally exports both SVG and DXF together in a single ZIP archive — giving the studio both the web-compatible vector and the machine-compatible cutting file in one download. Saves time when delivering to clients who use different software.</div>
+      <span class="sub-tech">Python zipfile · BytesIO in-memory</span>
+    </div>
+
+  </div>
+
+  <div class="callout callout-amber">
+    <strong>CNC Tip:</strong> Use threshold 80–100 for laser cutting paths — this ensures only fully solid areas generate cutting paths, avoiding stray half-tone paths that waste machine time and cause burn-through on thin materials.
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     TECH STACK PAGE
+══════════════════════════════════════════════════ -->
+<div class="full-tech-page">
+  <div class="section-label">Technology</div>
+  <div class="page-title">System Architecture &amp; Tech Stack</div>
+  <div class="page-subtitle">Full breakdown of every library, framework, and tool used to build MahaShankh Studio Pro.</div>
+
+  <div class="arch-boxes">
+    <div class="arch-box">
+      <div class="arch-box-title" style="color:#7C3AED;">🧠 AI / ML Layer</div>
+      <div class="arch-item">Real-ESRGAN (super-resolution)</div>
+      <div class="arch-item">ONNX Runtime CPU inference</div>
+      <div class="arch-item">67MB model weights</div>
+      <div class="arch-item">512×512 tile processing</div>
+      <div class="arch-item">rembg (bg removal)</div>
+    </div>
+    <div class="arch-box">
+      <div class="arch-box-title" style="color:#06B6D4;">⚙ Backend / API</div>
+      <div class="arch-item">Python 3.13</div>
+      <div class="arch-item">FastAPI + Uvicorn ASGI</div>
+      <div class="arch-item">Pillow (PIL) image I/O</div>
+      <div class="arch-item">OpenCV (cv2) processing</div>
+      <div class="arch-item">NumPy array operations</div>
+    </div>
+    <div class="arch-box">
+      <div class="arch-box-title" style="color:#10B981;">🖥 Frontend / UI</div>
+      <div class="arch-item">Vanilla HTML5 + CSS3</div>
+      <div class="arch-item">JavaScript ES2020</div>
+      <div class="arch-item">Plus Jakarta Sans font</div>
+      <div class="arch-item">JetBrains Mono (mono)</div>
+      <div class="arch-item">Glassmorphism design</div>
+    </div>
+  </div>
+
+  <table class="stack">
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Technology</th>
+        <th>Version / Detail</th>
+        <th>Used For</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Language</td>
+        <td>Python</td>
+        <td><code>3.13</code></td>
+        <td>Backend runtime, all processing logic</td>
+      </tr>
+      <tr>
+        <td>Web Framework</td>
+        <td>FastAPI</td>
+        <td><code>0.110+</code></td>
+        <td>REST API, static file serving, async endpoints</td>
+      </tr>
+      <tr>
+        <td>ASGI Server</td>
+        <td>Uvicorn</td>
+        <td><code>0.28+</code></td>
+        <td>High-performance Python web server</td>
+      </tr>
+      <tr>
+        <td>Image Processing</td>
+        <td>Pillow (PIL)</td>
+        <td><code>10+</code></td>
+        <td>Format conversion, CMYK split, DPI embed, bleed, plate export</td>
+      </tr>
+      <tr>
+        <td>Computer Vision</td>
+        <td>OpenCV (cv2)</td>
+        <td><code>4.9+</code></td>
+        <td>Contour detection, vectorisation, threshold, bleed fill</td>
+      </tr>
+      <tr>
+        <td>Numerical Computing</td>
+        <td>NumPy</td>
+        <td><code>1.26+</code></td>
+        <td>GCR colour conversion, tile repeat, ink coverage maths</td>
+      </tr>
+      <tr>
+        <td>AI Super-Resolution</td>
+        <td>Real-ESRGAN</td>
+        <td><code>ONNX 67MB</code></td>
+        <td>2×/4×/8× upscaling with texture reconstruction</td>
+      </tr>
+      <tr>
+        <td>AI Runtime</td>
+        <td>ONNX Runtime</td>
+        <td><code>CPU provider</code></td>
+        <td>Inference without GPU — pure CPU execution</td>
+      </tr>
+      <tr>
+        <td>Background Removal</td>
+        <td>rembg</td>
+        <td><code>latest</code></td>
+        <td>Subject isolation, transparent PNG alpha mask</td>
+      </tr>
+      <tr>
+        <td>DXF Generation</td>
+        <td>ezdxf</td>
+        <td><code>1.2+</code></td>
+        <td>CNC/embroidery vector export from contour points</td>
+      </tr>
+      <tr>
+        <td>File Archiving</td>
+        <td>Python zipfile</td>
+        <td><code>stdlib</code></td>
+        <td>CMYK plate ZIP bundles, SVG+DXF combo exports</td>
+      </tr>
+      <tr>
+        <td>Frontend Language</td>
+        <td>HTML5 + CSS3 + JS</td>
+        <td><code>ES2020</code></td>
+        <td>UI — no frameworks, pure component architecture</td>
+      </tr>
+      <tr>
+        <td>Typography</td>
+        <td>Plus Jakarta Sans</td>
+        <td><code>Google Fonts</code></td>
+        <td>UI text — modern, clean, professional weight range</td>
+      </tr>
+      <tr>
+        <td>Monospace Font</td>
+        <td>JetBrains Mono</td>
+        <td><code>Google Fonts</code></td>
+        <td>Code values, file stats, DPI/size readouts</td>
+      </tr>
+      <tr>
+        <td>Design System</td>
+        <td>Glassmorphism CSS</td>
+        <td><code>14-file arch</code></td>
+        <td>Backdrop blur, dark mode palette, component tokens</td>
+      </tr>
+      <tr>
+        <td>Version Control</td>
+        <td>Git + GitHub</td>
+        <td><code>main branch</code></td>
+        <td>Source control, CI/CD trigger for deployment</td>
+      </tr>
+      <tr>
+        <td>Deployment</td>
+        <td>Render / Vercel</td>
+        <td><code>Auto-deploy</code></td>
+        <td>Cloud hosting, auto-redeploy on git push</td>
+      </tr>
+      <tr>
+        <td>API Documentation</td>
+        <td>FastAPI Swagger</td>
+        <td><code>/docs</code></td>
+        <td>Interactive API explorer, auto-generated from code</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- API ROUTES -->
+  <div style="margin-top:36px;">
+    <div class="section-label" style="margin-bottom:8px;">REST API Routes</div>
+    <div style="font-size:0.82rem; color:var(--muted); margin-bottom:8px;">All endpoints accept multipart/form-data. Base URL: <code style="font-family:'JetBrains Mono'; background:#EDE9FE; color:#7C3AED; padding:2px 6px; border-radius:3px;">http://localhost:8000</code></div>
+    <table class="api">
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>What It Does</th>
+          <th>Key Parameters</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="method m-get">GET</span></td>
+          <td class="endpoint">/health</td>
+          <td>Engine health check — returns OK if backend is running</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><span class="method m-post">POST</span></td>
+          <td class="endpoint">/api/v1/inspect</td>
+          <td>Inspect image metadata without converting — returns format, DPI, dimensions, colour mode</td>
+          <td>file</td>
+        </tr>
+        <tr>
+          <td><span class="method m-post">POST</span></td>
+          <td class="endpoint">/api/v1/convert</td>
+          <td>Full conversion — format, DPI, colour, bleed, crop marks, AI upscale, background removal</td>
+          <td>file, output_format, dpi, color_mode, add_bleed, bleed_margin_mm, add_crop_marks, upscale_factor, upscale_algorithm, remove_background</td>
+        </tr>
+        <tr>
+          <td><span class="method m-post">POST</span></td>
+          <td class="endpoint">/api/v1/separation/plates</td>
+          <td>Generate 4 CMYK plate TIFFs + original preview in a ZIP archive</td>
+          <td>file, job_title, dpi, return_json</td>
+        </tr>
+        <tr>
+          <td><span class="method m-post">POST</span></td>
+          <td class="endpoint">/api/v1/textile/pattern</td>
+          <td>Generate seamless tile repeat pattern for saree/fabric printing</td>
+          <td>file, repeat_mode, cols, rows</td>
+        </tr>
+        <tr>
+          <td><span class="method m-post">POST</span></td>
+          <td class="endpoint">/api/v1/textile/vectorize</td>
+          <td>Trace raster image into SVG/DXF vector paths</td>
+          <td>file, threshold, epsilon, export_format</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FRONTEND ARCHITECTURE -->
+  <div style="margin-top:36px;">
+    <div class="section-label" style="margin-bottom:8px;">Frontend File Architecture</div>
+    <div class="arch-boxes">
+      <div class="arch-box">
+        <div class="arch-box-title" style="color:#7C3AED;">CSS Components</div>
+        <div class="arch-item">tokens.css — design system variables</div>
+        <div class="arch-item">layout.css — app shell, 3-column grid</div>
+        <div class="arch-item">components.css — cards, tiles, buttons</div>
+        <div class="arch-item">tooltip.css — glassmorphic overlay</div>
+        <div class="arch-item">sidebar.css — upload zone, drawers</div>
+        <div class="arch-item">canvas.css — viewport, split slider</div>
+        <div class="arch-item">specs-panel.css — right inspector</div>
+      </div>
+      <div class="arch-box">
+        <div class="arch-box-title" style="color:#06B6D4;">JS Modules</div>
+        <div class="arch-item">state.js — global app state (single source)</div>
+        <div class="arch-item">api.js — all fetch() backend calls</div>
+        <div class="arch-item">ui.js — toast, loading, specs helpers</div>
+        <div class="arch-item">tooltip.js — data + open/close engine</div>
+        <div class="arch-item">canvas.js — split slider, bleed overlay</div>
+        <div class="arch-item">main.js — app init, all event wiring</div>
+      </div>
+      <div class="arch-box">
+        <div class="arch-box-title" style="color:#10B981;">Backend Services</div>
+        <div class="arch-item">converter.py — main pipeline</div>
+        <div class="arch-item">color_manager.py — GCR CMYK</div>
+        <div class="arch-item">bleed_manager.py — margin engine</div>
+        <div class="arch-item">color_separator.py — plate generator</div>
+        <div class="arch-item">pattern_engine.py — tile repeat</div>
+        <div class="arch-item">vectorizer.py — SVG/DXF tracer</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:40px; padding-top:20px; border-top:2px solid var(--border); display:flex; justify-content:space-between; align-items:flex-end;">
+    <div>
+      <div style="font-size:0.75rem; font-weight:700; color:var(--muted); margin-bottom:4px;">MahaShankh Studio Pro</div>
+      <div style="font-size:0.68rem; color:#94A3B8;">AI Print, Prepress &amp; Textile Engineering Platform</div>
+    </div>
+    <div style="text-align:right; font-size:0.68rem; color:#94A3B8;">
+      <div>github.com/manikanta-silaparasetti/mahasankh</div>
+      <div style="margin-top:2px;">Built with Python 3.13 · FastAPI · Real-ESRGAN · Pillow · OpenCV</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PRINT BUTTON (hidden when printing) ── -->
+<div style="position:fixed; bottom:24px; right:24px; z-index:999; display:flex; gap:10px;">
+  <button onclick="window.print()"
+    style="padding:12px 22px; background:linear-gradient(135deg,#7C3AED,#06B6D4); color:white; border:none; border-radius:100px; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.85rem; font-weight:700; cursor:pointer; box-shadow:0 8px 24px rgba(124,58,237,0.5); display:flex; align-items:center; gap:8px;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Save as PDF
+  </button>
+</div>
+
+<style>
+  @media print {
+    div[style*="position:fixed"] { display: none !important; }
+  }
+</style>
+
+</body>
+</html>

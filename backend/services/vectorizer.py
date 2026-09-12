@@ -7,7 +7,10 @@ Converts raster silhouettes, motifs, and contours into mathematical vector forma
 
 from typing import Tuple, Dict, Any, List, Optional
 import numpy as np
-import cv2
+try:
+    import cv2
+except ImportError:
+    cv2 = None
 from PIL import Image
 
 
@@ -24,6 +27,8 @@ class AutoVectorizer:
         tolerance: float = 1.2
     ) -> Tuple[List[np.ndarray], int, int]:
         """Extracts and simplifies geometric polygon contours using OpenCV."""
+        if cv2 is None:
+            raise RuntimeError("OpenCV (opencv-python-headless) is required for vector tracing.")
         # Convert to grayscale
         gray = np.array(image.convert("L"))
         h, w = gray.shape
