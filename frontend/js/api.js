@@ -19,15 +19,23 @@ const API_BASE = (() => {
   return '';
 })();
 
+console.log('[MahaShankh Studio] Connected via API Base:', API_BASE || '(same-origin / relative)');
+
 /**
  * Check if the backend engine is online.
  * Returns true if healthy, false otherwise.
  */
 async function apiCheckHealth() {
   try {
-    const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(4000) });
-    return res.ok;
-  } catch {
+    const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(6000) });
+    if (res.ok) {
+      console.log('[MahaShankh API] Engine online: 200 OK');
+      return true;
+    }
+    console.warn('[MahaShankh API] Health check status:', res.status);
+    return false;
+  } catch (err) {
+    console.error('[MahaShankh API] Health check failed:', err);
     return false;
   }
 }

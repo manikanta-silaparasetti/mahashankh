@@ -107,7 +107,10 @@ if FRONTEND_DIR.exists() and (FRONTEND_DIR / "index.html").exists():
     @app.get("/", tags=["UI"], include_in_schema=False)
     def serve_frontend():
         """Serves the Production Image Format Studio UI."""
-        return FileResponse(FRONTEND_DIR / "index.html")
+        return FileResponse(
+            FRONTEND_DIR / "index.html",
+            headers={"Cache-Control": "no-cache, no-store, must-revalidate"}
+        )
 
     app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
 
