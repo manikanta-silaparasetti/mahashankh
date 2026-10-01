@@ -4,9 +4,20 @@
  * Base URL auto-detected (file:// → localhost:8000, served → relative)
  */
 
-const API_BASE = (
-  window.location.protocol === 'file:' || !window.location.port
-) ? 'http://localhost:8000' : '';
+const API_BASE = (() => {
+  // If file opened directly from local disk (file://)
+  if (window.location.protocol === 'file:') {
+    return 'http://localhost:8000';
+  }
+  // If running from separate dev servers like Live Server (:5500) or Vite (:5173)
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    if (window.location.port && window.location.port !== '8000') {
+      return 'http://localhost:8000';
+    }
+  }
+  // In production (Render, Vercel, or served by FastAPI on any domain)
+  return '';
+})();
 
 /**
  * Check if the backend engine is online.
