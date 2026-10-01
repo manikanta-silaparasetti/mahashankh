@@ -148,9 +148,14 @@ function resetFileLoaded() {
 /* ─── Enable/Disable Convert Button ─── */
 function setConvertBtnState(enabled, label) {
   const btn = document.getElementById('convertBtn');
-  if (!btn) return;
-  btn.disabled = !enabled;
-  if (label) btn.querySelector('.btn-label').textContent = label;
+  if (btn) {
+    btn.disabled = !enabled;
+    if (label) {
+      const lbl = btn.querySelector('.btn-label');
+      if (lbl) lbl.textContent = label;
+    }
+  }
+  syncMobileActionBtn();
 }
 
 /* ─── Build download URL and trigger download ─── */
@@ -173,4 +178,126 @@ function readFileAsDataURL(file) {
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE DRAWER & RESPONSIVE CONTROLS
+   ═══════════════════════════════════════════════════════════ */
+
+function toggleMobileSidebar() {
+  const sidebar = document.getElementById('sidebarPanel');
+  const specs = document.getElementById('specsPanel');
+  const backdrop = document.getElementById('mobileDrawerBackdrop');
+  if (!sidebar) return;
+
+  specs?.classList.remove('mobile-open');
+  const isOpen = sidebar.classList.toggle('mobile-open');
+  backdrop?.classList.toggle('active', isOpen);
+}
+
+function toggleMobileSpecs() {
+  const sidebar = document.getElementById('sidebarPanel');
+  const specs = document.getElementById('specsPanel');
+  const backdrop = document.getElementById('mobileDrawerBackdrop');
+  if (!specs) return;
+
+  sidebar?.classList.remove('mobile-open');
+  const isOpen = specs.classList.toggle('mobile-open');
+  backdrop?.classList.toggle('active', isOpen);
+}
+
+function closeMobileDrawers() {
+  document.getElementById('sidebarPanel')?.classList.remove('mobile-open');
+  document.getElementById('specsPanel')?.classList.remove('mobile-open');
+  document.getElementById('mobileDrawerBackdrop')?.classList.remove('active');
+}
+
+/**
+ * Handle Primary Action click on Mobile Sticky Bar.
+ * Routes dynamically according to active tool & file state.
+ */
+function handleMobilePrimaryAction() {
+  // If no file loaded yet, prompt file picker
+  if (!AppState.uploadedFile) {
+    const input = document.getElementById('sidebarFileInput') || document.getElementById('canvasDropInput');
+    input?.click();
+    return;
+  }
+
+  // If download is ready, trigger download
+  if (AppState.downloadReady && AppState.lastConvertedBlob) {
+    handleDownload();
+    return;
+  }
+
+  // Close open drawer when action is triggered so user can see progress on canvas
+  closeMobileDrawers();
+
+  // Otherwise, trigger current mode action
+  switch (AppState.mode) {
+    case 'converter':
+      handleConvert();
+      break;
+    case 'separation':
+      handleSeparate();
+      break;
+    case 'pattern':
+      handlePattern();
+      break;
+    case 'vector':
+      handleVectorize();
+      break;
+  }
+}
+
+/**
+ * Sync the Mobile Action Button with the active mode and desktop buttons.
+ */
+function syncMobileActionBtn() {
+  const btn = document.getElementById('mobileActionBtn');
+  const label = document.getElementById('mobileActionLabel');
+  if (!btn || !label) return;
+
+  if (!AppState.uploadedFile) {
+    btn.disabled = false;
+    btn.className = 'mobile-action-btn btn-primary';
+    label.textContent = 'Upload Artwork';
+    return;
+  }
+
+  if (AppState.downloadReady) {
+    btn.disabled = false;
+    btn.className = 'mobile-action-btn btn-success';
+    label.textContent = 'Download Output';
+    return;
+  }
+
+  btn.className = 'mobile-action-btn btn-primary';
+
+  switch (AppState.mode) {
+    case 'converter': {
+      const orig = document.getElementById('convertBtn');
+      btn.disabled = orig ? orig.disabled : false;
+      label.textContent = 'Convert & Render';
+      break;
+    }
+    case 'separation': {
+      const orig = document.getElementById('separateBtn');
+      btn.disabled = orig ? orig.disabled : false;
+      label.textContent = 'Generate Plates';
+      break;
+    }
+    case 'pattern': {
+      const orig = document.getElementById('patternBtn');
+      btn.disabled = orig ? orig.disabled : false;
+      label.textContent = 'Repeat Pattern';
+      break;
+    }
+    case 'vector': {
+      const orig = document.getElementById('vectorBtn');
+      btn.disabled = orig ? orig.disabled : false;
+      label.textContent = 'Trace Vectors';
+      break;
+    }
+  }
 }

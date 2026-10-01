@@ -81,11 +81,11 @@ async function initApp() {
   // Wire download button
   document.getElementById('downloadBtn')?.addEventListener('click', handleDownload);
 
-  // Wire re-upload button
-  document.querySelector('.btn-reupload')?.addEventListener('click', resetToUploadState);
-
   // Window resize — redraw bleed overlay
   window.addEventListener('resize', scheduleBleedRedraw);
+
+  // Initial sync of mobile action bar
+  syncMobileActionBtn();
 
   console.log('[MahaShankh] Ready.');
 }
@@ -259,6 +259,14 @@ function switchMode(mode) {
   document.querySelectorAll('.mode-panel').forEach(p => {
     p.classList.toggle('active', p.dataset.mode === mode);
   });
+
+  // Show correct desktop footer action button
+  document.querySelectorAll('.footer-mode-actions').forEach(el => {
+    el.style.display = el.dataset.mode === mode ? '' : 'none';
+  });
+
+  // Sync mobile action bar
+  syncMobileActionBtn();
 
   // Update canvas view based on mode
   switch (mode) {
@@ -728,6 +736,8 @@ async function handleVectorize() {
 function showDownloadSection(suggestedName, ext, blob) {
   AppState.outputBlob = blob;
   AppState.outputSizeBytes = blob ? blob.size : 0;
+  AppState.downloadReady = true;
+  AppState.lastConvertedBlob = blob;
 
   const section = document.getElementById('downloadSection');
   const nameInput = document.getElementById('outputFilenameInput');
@@ -744,11 +754,15 @@ function showDownloadSection(suggestedName, ext, blob) {
   if (extBadge) extBadge.textContent = ext;
 
   section.style.display = 'flex';
+  syncMobileActionBtn();
 }
 
 function hideDownloadSection() {
+  AppState.downloadReady = false;
+  AppState.lastConvertedBlob = null;
   const section = document.getElementById('downloadSection');
   if (section) section.style.display = 'none';
+  syncMobileActionBtn();
 }
 
 /**
