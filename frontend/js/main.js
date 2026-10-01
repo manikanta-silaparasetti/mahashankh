@@ -18,10 +18,28 @@ async function initApp() {
   initSplitSlider();
 
   // Check engine health
-  const online = await apiCheckHealth();
+  const isCloud = window.location.protocol.startsWith('http') && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+  const online = await apiCheckHealth(isCloud ? 4 : 2, 1200);
   setEngineStatus(online);
   if (!online) {
-    showToast('⚠ Backend engine offline. Start the server with START.bat', 'error', 6000);
+    if (isCloud) {
+      showToast('⚡ Connecting to cloud engine… (waking up instance)', 'info', 4000);
+      // Auto-poll in background until engine responds
+      const pollTimer = setInterval(async () => {
+        const recheck = await apiCheckHealth(1, 500);
+        if (recheck) {
+          clearInterval(pollTimer);
+          setEngineStatus(true);
+          showToast('✅ Cloud engine connected and ready!', 'success', 3000);
+        }
+      }, 3500);
+    } else {
+      showToast('⚠ Backend engine offline. Start the server with START.bat', 'error', 6000);
+    }
+  } else {
+    if (isCloud) {
+      showToast('✅ Cloud engine connected and ready!', 'success', 2500);
+    }
   }
 
   // Wire upload zones (sidebar + canvas onboarding)

@@ -22,22 +22,28 @@ const API_BASE = (() => {
 console.log('[MahaShankh Studio] Connected via API Base:', API_BASE || '(same-origin / relative)');
 
 /**
- * Check if the backend engine is online.
- * Returns true if healthy, false otherwise.
+ * Check if the backend engine is online with automatic retries.
+ * @param {number} retries
+ * @param {number} delayMs
+ * @returns {Promise<boolean>}
  */
-async function apiCheckHealth() {
-  try {
-    const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(6000) });
-    if (res.ok) {
-      console.log('[MahaShankh API] Engine online: 200 OK');
-      return true;
+async function apiCheckHealth(retries = 3, delayMs = 1200) {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(8000) });
+      if (res.ok) {
+        console.log(`[MahaShankh API] Engine online: 200 OK (attempt ${attempt})`);
+        return true;
+      }
+      console.warn(`[MahaShankh API] Health check status ${res.status} (attempt ${attempt})`);
+    } catch (err) {
+      console.warn(`[MahaShankh API] Health attempt ${attempt}/${retries} failed:`, err.message);
     }
-    console.warn('[MahaShankh API] Health check status:', res.status);
-    return false;
-  } catch (err) {
-    console.error('[MahaShankh API] Health check failed:', err);
-    return false;
+    if (attempt < retries) {
+      await new Promise(r => setTimeout(r, delayMs));
+    }
   }
+  return false;
 }
 
 /**

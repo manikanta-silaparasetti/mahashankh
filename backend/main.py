@@ -82,7 +82,7 @@ app.include_router(api_v1_router)
 # ─────────────────────────────────────────────
 #  Health & System Endpoints
 # ─────────────────────────────────────────────
-@app.get("/health", tags=["System"])
+@app.api_route("/health", methods=["GET", "HEAD"], tags=["System"])
 def health_check():
     """System health check and capability status."""
     return {
@@ -104,7 +104,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 FRONTEND_DIR = BASE_DIR / "frontend"
 
 if FRONTEND_DIR.exists() and (FRONTEND_DIR / "index.html").exists():
-    @app.get("/", tags=["UI"], include_in_schema=False)
+    @app.api_route("/", methods=["GET", "HEAD"], tags=["UI"], include_in_schema=False)
     def serve_frontend():
         """Serves the Production Image Format Studio UI."""
         return FileResponse(
