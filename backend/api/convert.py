@@ -12,11 +12,8 @@ from fastapi.responses import FileResponse
 from PIL import Image
 import io
 
-try:
-    from rembg import remove
-    HAS_REMBG = True
-except ImportError:
-    HAS_REMBG = False
+# rembg is lazy-imported inside the endpoint on demand to enable instant server boot
+HAS_REMBG = True
 
 from ..models.schemas import (
     SupportedOutputFormat,
@@ -129,11 +126,12 @@ async def convert_image(
 
         # Apply background removal if requested
         if remove_background:
-            if not HAS_REMBG:
+            try:
+                from rembg import remove, new_session
+            except ImportError:
                 raise HTTPException(status_code=500, detail="Background removal (rembg) is not installed on the server.")
             
             # Use ultra-lightweight model u2netp (only ~4.7 MB instead of 1GB)
-            from rembg import new_session
             session = new_session("u2netp")
             
             # rembg requires PIL image
